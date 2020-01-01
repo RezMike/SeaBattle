@@ -1,5 +1,4 @@
 import com.soywiz.korge.gradle.*
-import org.jetbrains.kotlin.org.fusesource.jansi.Ansi
 
 buildscript {
 	repositories {
@@ -21,7 +20,7 @@ korge {
 	name = "SeaBattle"
 	icon = file("icon.png")
 	fullscreen = true
-	orientation = com.soywiz.korge.gradle.Orientation.LANDSCAPE
+	orientation = Orientation.LANDSCAPE
 	gameCategory = GameCategory.STRATEGY
 	jvmMainClassName = "game.MainKt"
 }
