@@ -18,7 +18,7 @@ korge {
 	id = "io.github.rezmike"
 	version = "0.0.1"
 	name = "SeaBattle"
-	icon = file("icon.png")
+	icon = file("src/commonMain/resources/icon.png")
 	fullscreen = true
 	orientation = Orientation.LANDSCAPE
 	gameCategory = GameCategory.STRATEGY

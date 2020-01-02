@@ -1,13 +1,17 @@
 package game
 
+import com.soywiz.korge.html.Html
+import com.soywiz.korge.input.onClick
+import com.soywiz.korge.newui.UISkin
 import com.soywiz.korge.scene.Scene
 import com.soywiz.korge.view.Container
 import com.soywiz.korge.view.text
+import com.soywiz.korim.bitmap.slice
 import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
-import ui.Button
-import ui.button
+import com.soywiz.korim.format.readBitmap
+import com.soywiz.korio.file.std.resourcesVfs
 import ui.centerHorizontallyBy
+import ui.uiButton
 
 class MenuScene : Scene() {
 
@@ -17,24 +21,21 @@ class MenuScene : Scene() {
             y = 160.0
         }
 
-        val compBtn = greyButton("New game with computer"/*"Новая игра с компьютером"*/) {
-            padding = 20.0
+        val skin = UISkin(
+            resourcesVfs["button_default.png"].readBitmap().slice(),
+            resourcesVfs["button_hover.png"].readBitmap().slice(),
+            resourcesVfs["button_down.png"].readBitmap().slice(),
+            font = Html.FontFace.Bitmap(RobotoFont32)
+        )
+
+        val compBtn = uiButton(380, 70, "New game with computer"/*"Новая игра с компьютером"*/, skin) {
             centerHorizontallyBy(root)
             y = 310.0
         }
 
-        val networkBtn = greyButton("New game through network"/*"Новая игра по сети"*/) {
-            padding = 20.0
+        val networkBtn = uiButton(380, 70, "New game through network"/*"Новая игра по сети"*/, skin) {
             centerHorizontallyBy(root)
             y = 440.0
-        }
-
-        if (compBtn.width > networkBtn.width) {
-            networkBtn.x = compBtn.x
-            networkBtn.width = compBtn.width
-        } else if (compBtn.width < networkBtn.width) {
-            compBtn.x = networkBtn.x
-            compBtn.width = networkBtn.width
         }
 
         compBtn.onClick {
@@ -44,25 +45,6 @@ class MenuScene : Scene() {
         networkBtn.onClick {
             //TODO: change scene
             compBtn.enabled = !compBtn.enabled
-        }
-    }
-
-    private fun Container.greyButton(text: String, init: Button.() -> Unit) = button(text) {
-        init.invoke(this)
-        strokeThickness = 1.0
-        roundingRadius = 2.0
-
-        default {
-            background = RGBA(225, 225, 225)
-            strokeColor = RGBA(173, 173, 173)
-        }
-        onOver {
-            background = RGBA(229, 241, 251)
-            strokeColor = RGBA(0, 120, 215)
-        }
-        onDown {
-            background = RGBA(204, 228, 247)
-            strokeColor = RGBA(0, 120, 215)
         }
     }
 }
