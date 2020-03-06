@@ -14,18 +14,23 @@ lateinit var RobotoFont72: BitmapFont
 
 suspend fun main() = Korge(Korge.Config(module = MainModule, fullscreen = true))
 
-object MainModule : Module() {
+enum class GameMode {
+    COMPUTER, NETWORK
+}
 
+object MainModule : Module() {
     override val mainScene = MenuScene::class
     override val bgcolor = RGBA(238, 238, 238)
     override val size = SizeInt(1280, 720)
     override val icon = "icon.png"
     override val fullscreen = true
 
+    private var mode = GameMode.COMPUTER
+
     override suspend fun AsyncInjector.configure() {
         RobotoFont32 = resourcesVfs["roboto_32.fnt"].readBitmapFont()
         RobotoFont72 = resourcesVfs["roboto_72.fnt"].readBitmapFont()
-        mapPrototype { MenuScene() }
+        mapPrototype { MenuScene { mode = it } }
         mapPrototype { NewFieldScene() }
     }
 }

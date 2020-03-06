@@ -1,19 +1,17 @@
 package game
 
-import com.soywiz.korge.html.Html
-import com.soywiz.korge.input.onClick
-import com.soywiz.korge.newui.UISkin
-import com.soywiz.korge.scene.Scene
-import com.soywiz.korge.view.Container
-import com.soywiz.korge.view.text
-import com.soywiz.korim.bitmap.slice
-import com.soywiz.korim.color.Colors
-import com.soywiz.korim.format.readBitmap
-import com.soywiz.korio.file.std.resourcesVfs
-import ui.centerHorizontallyBy
-import ui.uiButton
+import com.soywiz.korge.html.*
+import com.soywiz.korge.input.*
+import com.soywiz.korge.scene.*
+import com.soywiz.korge.ui.*
+import com.soywiz.korge.view.*
+import com.soywiz.korim.bitmap.*
+import com.soywiz.korim.color.*
+import com.soywiz.korim.format.*
+import com.soywiz.korio.file.std.*
+import ui.*
 
-class MenuScene : Scene() {
+class MenuScene(private val initMode: (GameMode) -> Unit) : Scene() {
 
     override suspend fun Container.sceneInit() {
         text("Sea battle"/*"Морской бой"*/, 72.0, Colors.BLACK, RobotoFont72) {
@@ -21,30 +19,31 @@ class MenuScene : Scene() {
             y = 160.0
         }
 
-        val skin = UISkin(
-            resourcesVfs["button_default.png"].readBitmap().slice(),
-            resourcesVfs["button_hover.png"].readBitmap().slice(),
-            resourcesVfs["button_down.png"].readBitmap().slice(),
-            font = Html.FontFace.Bitmap(RobotoFont32)
+        defaultUIFont = Html.FontFace.Bitmap(RobotoFont32)
+
+        defaultUISkin = UISkin(
+            normal = resourcesVfs["button_default.png"].readBitmap().slice(),
+            over = resourcesVfs["button_hover.png"].readBitmap().slice(),
+            down = resourcesVfs["button_down.png"].readBitmap().slice()
         )
 
-        val compBtn = uiButton(380, 70, "New game with computer"/*"Новая игра с компьютером"*/, skin) {
+        val compBtn = textButton(380, 70, "New game with computer"/*"Новая игра с компьютером"*/) {
             centerHorizontallyBy(root)
             y = 310.0
         }
 
-        val networkBtn = uiButton(380, 70, "New game through network"/*"Новая игра по сети"*/, skin) {
+        val networkBtn = textButton(380, 70, "New game through network"/*"Новая игра по сети"*/) {
             centerHorizontallyBy(root)
             y = 440.0
         }
 
         compBtn.onClick {
-            //TODO: change scene
-            networkBtn.enabled = !networkBtn.enabled
+            initMode(GameMode.COMPUTER)
+            sceneContainer.changeTo<NewFieldScene>()
         }
         networkBtn.onClick {
-            //TODO: change scene
-            compBtn.enabled = !compBtn.enabled
+            initMode(GameMode.NETWORK)
+            sceneContainer.changeTo<NewFieldScene>()
         }
     }
 }
